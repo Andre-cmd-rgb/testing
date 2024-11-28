@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Countdown to 2025</title>
+    <style>
+        body {
+            background-color: black;
+            color: green;
+            font-family: "Courier New", Courier, monospace;
+            margin: 0;
+            padding: 0;
+        }
+        a {
+            color: lime;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        header, footer {
+            text-align: center;
+            padding: 10px;
+        }
+        .content {
+            padding: 20px;
+            text-align: center;
+        }
+        .divider {
+            border: 1px solid green;
+            margin: 10px 0;
+        }
+        .timer {
+            font-size: 2em;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Andrea's Dev Space</h1>
+        <p><em>Welcome to the countdown...</em></p>
+    </header>
+    <div class="divider"></div>
+    <div class="content">
+        <h2>⏳ Countdown to 2025</h2>
+        <p>Time until the new year:</p>
+        <div class="timer" id="countdown">Loading...</div>
+    </div>
+    <footer>
+        <p>© 2024 Andrea's Dev Space | <span>💻</span></p>
+    </footer>
+
+    <script>
+        // Set the date we're counting down to
+        var countDownDate = new Date("Jan 1, 2025 00:00:00").getTime();
+
+        // Update the countdown every second
+        var countdownElement = document.getElementById("countdown");
+        setInterval(function() {
+            var now = new Date().getTime();
+            var distance = countDownDate - now;
+
+            if (distance >= 0) {
+                // Calculate days, hours, minutes, and seconds
+                var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                // Update the countdown text
+                countdownElement.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+            } else {
+                // Show a message when the countdown ends
+                countdownElement.innerHTML = "🎉 Happy New Year!";
+            }
+        }, 1000);
+    </script>
+</body>
+</html>
