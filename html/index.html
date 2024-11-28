@@ -48,6 +48,7 @@
             white-space: pre-wrap;
             font-family: "Courier New", Courier, monospace;
             font-size: 16px;
+            display: none; /* Initially hidden */
         }
         #command-input {
             background-color: black;
@@ -58,6 +59,14 @@
             font-size: 16px;
             outline: none;
             padding: 5px;
+            display: none; /* Initially hidden */
+        }
+        #toggle-terminal-link {
+            color: lime;
+            cursor: pointer;
+        }
+        #toggle-terminal-link:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
@@ -74,7 +83,8 @@
                 <li><a href="/linktree">🌳 Link Tree</a></li>
                 <li><a href="/countdown">⏳ Countdown to 2025</a></li>
                 <li><a href="/note">📝 Notes</a></li>
-                <li><a href="test">📥 Test</a></li>
+                <li><a href="/test">📥 Test</a></li>
+                <li><a id="toggle-terminal-link">🖥️ Open Terminal</a></li>
             </ul>
         </div>
         <div class="divider"></div>
@@ -91,8 +101,7 @@
     </div>
     <div class="divider"></div>
     <!-- Terminal Section -->
-    <div class="section">
-        <h2>🖥️ Terminal</h2>
+    <div class="section" id="terminal-section">
         <div id="terminal">
             <p>Welcome to the terminal! Type 'ls' to see available pages or 'cd' to navigate.</p>
         </div>
@@ -106,6 +115,8 @@
     <script>
         const terminal = document.getElementById('terminal');
         const commandInput = document.getElementById('command-input');
+        const toggleTerminalLink = document.getElementById('toggle-terminal-link');
+        const terminalSection = document.getElementById('terminal-section');
 
         const directories = {
             '/linktree': '/linktree',
@@ -113,6 +124,19 @@
             '/note': '/note',
             '/test': '/test'
         };
+
+        // Toggle terminal visibility when the link is clicked
+        toggleTerminalLink.addEventListener('click', () => {
+            if (terminal.style.display === 'none' || terminal.style.display === '') {
+                terminal.style.display = 'block';
+                commandInput.style.display = 'block';  // Show command input
+                toggleTerminalLink.textContent = '🖥️ Close Terminal'; // Change text to "Close Terminal"
+            } else {
+                terminal.style.display = 'none';
+                commandInput.style.display = 'none';  // Hide command input
+                toggleTerminalLink.textContent = '🖥️ Open Terminal'; // Change text to "Open Terminal"
+            }
+        });
 
         function handleCommand(event) {
             if (event.key === 'Enter') {
@@ -146,6 +170,8 @@
         }
 
         function changeDirectory(path) {
+            // Redirect to the corresponding page when 'cd' is used
+            window.location.href = directories[path];
             terminal.innerHTML += `<p>Changed directory to <a href="${directories[path]}" style="color: lime;">${path}</a></p>`;
         }
     </script>
