@@ -36,6 +36,29 @@
         .emoji {
             font-size: 1.5em;
         }
+        /* Terminal Styling */
+        #terminal {
+            width: 100%;
+            height: 300px;
+            background-color: black;
+            color: lime;
+            padding: 10px;
+            border: 1px solid green;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 16px;
+        }
+        #command-input {
+            background-color: black;
+            color: lime;
+            border: none;
+            width: 100%;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 16px;
+            outline: none;
+            padding: 5px;
+        }
     </style>
 </head>
 <body>
@@ -66,8 +89,65 @@
             <p><em>"The code is strong, but the coder is stronger."</em></p>
         </div>
     </div>
+    <div class="divider"></div>
+    <!-- Terminal Section -->
+    <div class="section">
+        <h2>🖥️ Terminal</h2>
+        <div id="terminal">
+            <p>Welcome to the terminal! Type 'ls' to see available pages or 'cd' to navigate.</p>
+        </div>
+        <input type="text" id="command-input" placeholder="Type a command..." onkeydown="handleCommand(event)">
+    </div>
+
     <footer>
         <p>© 2024 Andrea's Dev Space | <span class="emoji">💻</span></p>
     </footer>
+
+    <script>
+        const terminal = document.getElementById('terminal');
+        const commandInput = document.getElementById('command-input');
+
+        const directories = {
+            '/linktree': '/linktree',
+            '/countdown': '/countdown',
+            '/note': '/note',
+            '/test': '/test'
+        };
+
+        function handleCommand(event) {
+            if (event.key === 'Enter') {
+                const command = commandInput.value.trim();
+                commandInput.value = '';
+                
+                if (command === 'ls') {
+                    showDirectoryContents();
+                } else if (command.startsWith('cd ')) {
+                    const path = command.substring(3).trim();
+                    if (directories[path]) {
+                        changeDirectory(path);
+                    } else {
+                        terminal.innerHTML += `<p>bash: cd: ${path}: No such directory</p>`;
+                    }
+                } else {
+                    terminal.innerHTML += `<p>bash: command not found: ${command}</p>`;
+                }
+
+                terminal.scrollTop = terminal.scrollHeight; // Scroll to the bottom
+            }
+        }
+
+        function showDirectoryContents() {
+            let output = '<p>Available directories:</p><ul>';
+            for (let path in directories) {
+                output += `<li><a href="${directories[path]}" style="color: lime;">${path}</a></li>`;
+            }
+            output += '</ul>';
+            terminal.innerHTML += output;
+        }
+
+        function changeDirectory(path) {
+            terminal.innerHTML += `<p>Changed directory to <a href="${directories[path]}" style="color: lime;">${path}</a></p>`;
+        }
+    </script>
 </body>
 </html>
