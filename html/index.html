@@ -39,7 +39,7 @@
         /* Terminal Styling */
         #terminal {
             width: 100%;
-            height: 300px;
+            max-height: 300px;
             background-color: black;
             color: lime;
             padding: 10px;
@@ -142,8 +142,10 @@
             if (event.key === 'Enter') {
                 const command = commandInput.value.trim();
                 commandInput.value = '';
-                
-                if (command === 'ls') {
+
+                if (command === 'cls' || command === 'clear') {
+                    terminal.innerHTML = ''; // Clear the terminal
+                } else if (command === 'ls') {
                     showDirectoryContents();
                 } else if (command.startsWith('cd ')) {
                     const path = command.substring(3).trim();
