@@ -101,25 +101,40 @@
 </div>
 
 <script>
-    async function fetchRandomThought() {
-        try {
-            const response = await fetch('https://api.quotable.io/random'); // Replace with your preferred API
-            if (!response.ok) {
-                throw new Error(`API error: ${response.status}`);
-            }
-            const data = await response.json();
-            document.getElementById('random-thought').innerHTML = `<em>"${data.content}"</em> — ${data.author}`;
-        } catch (error) {
-            console.error(error);
+    function fetchRandomThought() {
+        // Generate a random callback name to prevent conflicts
+        const callbackName = `jsonpCallback_${Math.random().toString(36).substring(2)}`;
+
+        // Create the script element to fetch the JSONP data
+        const script = document.createElement('script');
+        script.src = `https://api.forismatic.com/api/1.0/?method=getQuote&lang=en&format=jsonp&jsonp=${callbackName}`;
+
+        // Define the callback function
+        window[callbackName] = function (data) {
+            // Populate the "Random Thought" section with the fetched quote
+            const quoteText = data.quoteText || "No quote available.";
+            const quoteAuthor = data.quoteAuthor ? `— ${data.quoteAuthor}` : "";
+            document.getElementById('random-thought').innerHTML = `<em>"${quoteText}"</em> <br> ${quoteAuthor}`;
+
+            // Clean up: remove the script tag and callback to avoid polluting the global namespace
+            delete window[callbackName];
+            document.body.removeChild(script);
+        };
+
+        // Handle JSONP errors (optional but recommended)
+        script.onerror = function () {
             document.getElementById('random-thought').innerHTML = `<em>Failed to load a random thought. Try again later.</em>`;
-        }
+            delete window[callbackName];
+            document.body.removeChild(script);
+        };
+
+        // Append the script to the document to trigger the request
+        document.body.appendChild(script);
     }
 
     // Fetch the random thought when the page loads
     fetchRandomThought();
 </script>
-    </div>
-    <div class="divider"></div>
     <!-- Terminal Section -->
     <div class="section" id="terminal-section">
         <div id="terminal">
