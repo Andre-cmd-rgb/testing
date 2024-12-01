@@ -36,31 +36,13 @@
         .emoji {
             font-size: 1.5em;
         }
-        /* Terminal Styling */
-        #terminal {
-            width: 99%;
-            max-width: 99%; /* Ensure the terminal takes full width but doesn't overflow */
-            max-height: 400px;
-            background-color: black;
-            color: lime;
-            padding: 10px;
-            border: 1px solid green;
-            overflow-y: auto;
-            white-space: pre-wrap;
-            font-family: "Courier New", Courier, monospace;
-            font-size: 16px;
-            display: none; /* Initially hidden */
-        }
-        #command-input {
-            background-color: black;
-            color: lime;
-            border: none;
+        #terminal-section {
             width: 100%;
-            font-family: "Courier New", Courier, monospace;
-            font-size: 16px;
-            outline: none;
-            padding: 5px;
-            display: none; /* Initially hidden */
+            height: 400px;
+            background-color: black;
+            border: 1px solid green;
+            margin: 20px 0;
+            display: none;
         }
         #toggle-terminal-link {
             color: lime;
@@ -91,56 +73,45 @@
         <div class="divider"></div>
         <div class="section">
             <h2>About Me</h2>
-            <p>Hello, world! I'm Andrea, i love coding and aviation and i hate school💀.</p>
+            <p>Hello, world! I'm Andrea, I love coding and aviation, and I hate school💀.</p>
             <p>Email me at: <a href="mailto:andreavigolini@gmail.com">andreavigolini@gmail.com</a></p>
         </div>
         <div class="divider"></div>
         <div class="section">
-    <h2>⚡ Random Quotes</h2>
-    <p id="random-thought"><em>Loading...</em></p>
-</div>
-
-<script>
-    function fetchRandomQuote() {
-        // Generate a random callback name to prevent conflicts
-        const callbackName = `jsonpCallback_${Math.random().toString(36).substring(2)}`;
-
-        // Create the script element to fetch the JSONP data
-        const script = document.createElement('script');
-        script.src = `https://api.forismatic.com/api/1.0/?method=getQuote&lang=en&format=jsonp&jsonp=${callbackName}`;
-
-        // Define the callback function
-        window[callbackName] = function (data) {
-            // Populate the "Random Thought" section with the fetched quote
-            const quoteText = data.quoteText || "No quote available.";
-            const quoteAuthor = data.quoteAuthor ? `— ${data.quoteAuthor}` : "";
-            document.getElementById('random-thought').innerHTML = `<em>"${quoteText}"</em> <br> ${quoteAuthor}`;
-
-            // Clean up: remove the script tag and callback to avoid polluting the global namespace
-            delete window[callbackName];
-            document.body.removeChild(script);
-        };
-
-        // Handle JSONP errors (optional but recommended)
-        script.onerror = function () {
-            document.getElementById('random-thought').innerHTML = `<em>Failed to load a random thought. Try again later.</em>`;
-            delete window[callbackName];
-            document.body.removeChild(script);
-        };
-
-        // Append the script to the document to trigger the request
-        document.body.appendChild(script);
-    }
-
-    // Fetch the random thought when the page loads
-    fetchRandomQuote();
-</script>
-    <!-- Terminal Section -->
-    <div class="section" id="terminal-section">
-        <div id="terminal">
-            <p>Welcome to the terminal! Type 'ls' to see available pages or 'cd' to navigate.</p>
+            <h2>⚡ Random Quotes</h2>
+            <p id="random-thought"><em>Loading...</em></p>
         </div>
-        <input type="text" id="command-input" placeholder="Type a command..." onkeydown="handleCommand(event)">
+
+        <script>
+            function fetchRandomQuote() {
+                const callbackName = `jsonpCallback_${Math.random().toString(36).substring(2)}`;
+                const script = document.createElement('script');
+                script.src = `https://api.forismatic.com/api/1.0/?method=getQuote&lang=en&format=jsonp&jsonp=${callbackName}`;
+
+                window[callbackName] = function (data) {
+                    const quoteText = data.quoteText || "No quote available.";
+                    const quoteAuthor = data.quoteAuthor ? `— ${data.quoteAuthor}` : "";
+                    document.getElementById('random-thought').innerHTML = `<em>"${quoteText}"</em> <br> ${quoteAuthor}`;
+                    delete window[callbackName];
+                    document.body.removeChild(script);
+                };
+
+                script.onerror = function () {
+                    document.getElementById('random-thought').innerHTML = `<em>Failed to load a random thought. Try again later.</em>`;
+                    delete window[callbackName];
+                    document.body.removeChild(script);
+                };
+
+                document.body.appendChild(script);
+            }
+
+            fetchRandomQuote();
+        </script>
+
+        <div class="section" id="terminal-section">
+            <iframe src="https://andre-cmd-rgb.github.io/Web-OS/" width="100%" height="98%" frameborder="1"></iframe>
+        </div>
+
     </div>
 
     <footer>
@@ -148,69 +119,18 @@
     </footer>
 
     <script>
-        const terminal = document.getElementById('terminal');
-        const commandInput = document.getElementById('command-input');
-        const toggleTerminalLink = document.getElementById('toggle-terminal-link');
         const terminalSection = document.getElementById('terminal-section');
+        const toggleTerminalLink = document.getElementById('toggle-terminal-link');
 
-        const directories = {
-            '/linktree': '/linktree',
-            '/countdown': '/countdown',
-            '/note': '/note',
-            '/test': '/test'
-        };
-
-        // Toggle terminal visibility when the link is clicked
         toggleTerminalLink.addEventListener('click', () => {
-            if (terminal.style.display === 'none' || terminal.style.display === '') {
-                terminal.style.display = 'block';
-                commandInput.style.display = 'block';  // Show command input
-                toggleTerminalLink.textContent = '🖥️ Close Terminal'; // Change text to "Close Terminal"
+            if (terminalSection.style.display === 'none' || terminalSection.style.display === '') {
+                terminalSection.style.display = 'block';
+                toggleTerminalLink.textContent = '🖥️ Close Terminal';
             } else {
-                terminal.style.display = 'none';
-                commandInput.style.display = 'none';  // Hide command input
-                toggleTerminalLink.textContent = '🖥️ Open Terminal'; // Change text to "Open Terminal"
+                terminalSection.style.display = 'none';
+                toggleTerminalLink.textContent = '🖥️ Open Terminal';
             }
         });
-
-        function handleCommand(event) {
-            if (event.key === 'Enter') {
-                const command = commandInput.value.trim();
-                commandInput.value = '';
-
-                if (command === 'cls' || command === 'clear') {
-                    terminal.innerHTML = ''; // Clear the terminal
-                } else if (command === 'ls') {
-                    showDirectoryContents();
-                } else if (command.startsWith('cd ')) {
-                    const path = command.substring(3).trim();
-                    if (directories[path]) {
-                        changeDirectory(path);
-                    } else {
-                        terminal.innerHTML += `<p>bash: cd: ${path}: No such directory</p>`;
-                    }
-                } else {
-                    terminal.innerHTML += `<p>bash: command not found: ${command}</p>`;
-                }
-
-                terminal.scrollTop = terminal.scrollHeight; // Scroll to the bottom
-            }
-        }
-
-        function showDirectoryContents() {
-            let output = '<p>Available directories:</p><ul>';
-            for (let path in directories) {
-                output += `<li><a href="${directories[path]}" style="color: lime;">${path}</a></li>`;
-            }
-            output += '</ul>';
-            terminal.innerHTML += output;
-        }
-
-        function changeDirectory(path) {
-            // Redirect to the corresponding page when 'cd' is used
-            window.location.href = directories[path];
-            terminal.innerHTML += `<p>Changed directory to <a href="${directories[path]}" style="color: lime;">${path}</a></p>`;
-        }
     </script>
 </body>
 </html>
