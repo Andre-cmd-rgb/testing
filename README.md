@@ -4,4 +4,5 @@ acessible at: https://andrecmdrgb.it/
 
 # Screenshots
 
-![{ADE0EE52-0AF0-4350-9D6C-459F6A03E2B1}](https://github.com/user-attachments/assets/d321a15c-03aa-4cb5-9785-bc139e326ef1)
+![{DE57EAAF-FBDA-47E4-9B6C-24B5E4FDC904}](https://github.com/user-attachments/assets/18618fc8-09a0-4953-8d4d-eec72951005d)
+
