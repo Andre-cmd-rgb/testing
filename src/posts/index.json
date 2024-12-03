@@ -1,4 +1,3 @@
 [
-    { "title": "My First Blog Post", "file": "first-post.md" },
-    { "title": "Learning Markdown", "file": "learning-markdown.md" }
+    { "title": "About Me", "file": "about-me.md" }
 ]
