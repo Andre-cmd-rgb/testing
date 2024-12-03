@@ -27,14 +27,11 @@ jobs:
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
-
       - name: Upload content to Pages
         uses: actions/upload-pages-artifact@v3
         with:
-          # Use relative paths and ensure they exist
-          path: |
-            ./html
-            ./posts
+          path: "./html:./posts"
+
 
       - name: Deploy to GitHub Pages
         id: deployment
