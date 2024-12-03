@@ -45,17 +45,49 @@
     </header>
     <div class="divider"></div>
     <div class="content">
-        <div class="section">
-            <h2>📝 Notes</h2>
-            <p>Check out this <a href="https://youtu.be/d7ponUdlFLw?si=6lzpqfxo6Y41sQRX">YouTube link</a> for an interesting video about tech! (Linus)</p>
-            <p>Check out this other <a href="https://youtu.be/2jAH-51feAA?si=8IpV7cwIqXmcQkP9">YouTube link</a> for an interesting video about supersonic flight! (NASA)</p>
-            <p>Check out this <a href="https://youtu.be/C-nALYF73hU?si=ybtgbsQvMB1JsRGL">YouTube link</a> for an interesting and a bit scary video about the Concorde crash! (Mentour Pilot)</p>
-            <p>Check this <a href="https://youtu.be/26E4dgFZQoY?si=Barif-ZlM0mgCLQO">YouTube link</a> for a funny video! (Stockdroid)</p>
+        <div id="blog-list" class="section">
+            <h2>📝 Blog Posts</h2>
+            <ul id="posts-list"></ul>
+        </div>
+        <div id="blog-content" class="section" style="display: none;">
+            <button id="back-button" style="background: lime; border: none; padding: 5px;">← Back</button>
+            <div id="post-content"></div>
         </div>
     </div>
     <div class="divider"></div>
     <footer>
         <p>© 2024 Andrea's Dev Space | <span class="emoji">💻</span></p>
     </footer>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script>
+        async function loadPosts() {
+            const response = await fetch('posts/index.json');
+            const posts = await response.json();
+            const postsList = document.getElementById('posts-list');
+
+            postsList.innerHTML = posts.map(post => `
+                <li>
+                    <a href="#" data-file="${post.file}" onclick="loadPost(event, '${post.file}')">${post.title}</a>
+                </li>
+            `).join('');
+        }
+
+        async function loadPost(event, file) {
+            event.preventDefault();
+            const response = await fetch(`posts/${file}`);
+            const content = await response.text();
+            document.getElementById('post-content').innerHTML = marked.parse(content);
+
+            document.getElementById('blog-list').style.display = 'none';
+            document.getElementById('blog-content').style.display = 'block';
+        }
+
+        document.getElementById('back-button').addEventListener('click', () => {
+            document.getElementById('blog-list').style.display = 'block';
+            document.getElementById('blog-content').style.display = 'none';
+        });
+
+        loadPosts();
+    </script>
 </body>
 </html>
