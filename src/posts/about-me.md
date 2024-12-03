@@ -23,5 +23,4 @@ Below is a list of my recent projects:
     - GitHub: Star Shell
 # 🛠️ Skills
 - Languages: C#, Python, Lua, JavaScript
-- Frameworks & Tools: Flask, Spectre.Console, Cosmos
-- Specialties: OS development, CLI design, Web App creation, Game mechanics
+- Specialties: CLI design, Web App creation, Game mechanics
