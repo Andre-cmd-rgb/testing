@@ -22,22 +22,26 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  # Single deploy job since we're just deploying
   deploy:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
-      - name: Upload artifact
+
+      - name: Upload content to Pages
         uses: actions/upload-pages-artifact@v3
         with:
-          # Specify the html folder for deployment
-          path: './html'
+          # Include the html folder and the posts directory
+          path: |
+            ./html
+            ./posts
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
