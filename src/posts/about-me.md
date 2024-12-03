@@ -1,5 +1,5 @@
 # 👨‍💻 About Me
-Welcome to my GitHub! I’m a developer passionate about creating innovative tools and systems. From custom operating systems to creative web and game development projects, I love pushing the boundaries of technology.
+Welcome to my Personal Website! I’m a developer (btw i'm 16 so don't expect that much). From a custom linux based distro to web apps and game development projects, I love creating random stuff!
 
 Below is a list of my recent projects:
 
