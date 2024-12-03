@@ -30,7 +30,8 @@ jobs:
       - name: Upload content to Pages
         uses: actions/upload-pages-artifact@v3
         with:
-          path: "./html:./posts"
+          path: "./html|./posts"
+
 
 
       - name: Deploy to GitHub Pages
