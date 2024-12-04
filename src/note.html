@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Andrea's Dev Space - Notes</title>
+    <title>Andrea's Dev Space</title>
     <style>
         body {
             background-color: black;
@@ -37,6 +37,21 @@
             font-size: 1.5em;
         }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script>
+        async function loadAboutMe() {
+            try {
+                const response = await fetch('about/about-me.md');
+                if (!response.ok) throw new Error('Failed to load About Me content.');
+                const markdown = await response.text();
+                document.getElementById('about-me-content').innerHTML = marked.parse(markdown);
+            } catch (error) {
+                document.getElementById('about-me-content').innerHTML = '<p>Error loading About Me content. Please try again later.</p>';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadAboutMe);
+    </script>
 </head>
 <body>
     <header>
@@ -45,49 +60,55 @@
     </header>
     <div class="divider"></div>
     <div class="content">
-        <div id="blog-list" class="section">
-            <h2>📝 Notes and Posts</h2>
-            <ul id="posts-list"></ul>
+        <div class="section">
+            <h2>📡 Links</h2>
+            <ul>
+                <li><a href="/linktree">🌳 Link Tree (where I keep all my links)</a></li>
+                <li><a href="/note">📝 Notes and Posts</a></li>
+                <li><a href="/countdown">⏳ Countdown to 2025</a></li>
+                <li><a href="https://andre-cmd-rgb.github.io/Web-OS/" target="_blank">🖥️ Open Terminal</a></li>
+            </ul>
         </div>
-        <div id="blog-content" class="section" style="display: none;">
-            <button id="back-button" style="background: lime; border: none; padding: 5px;">← Back</button>
-            <div id="post-content"></div>
+        <div class="divider"></div>
+        <div class="section">
+            <h2>About Me</h2>
+            <div id="about-me-content"><p>Loading...</p></div>
         </div>
+        <div class="divider"></div>
+        <div class="section">
+            <h2>⚡ Random Quotes</h2>
+            <p id="random-thought"><em>Loading...</em></p>
+        </div>
+
+        <script>
+            function fetchRandomQuote() {
+                const callbackName = `jsonpCallback_${Math.random().toString(36).substring(2)}`;
+                const script = document.createElement('script');
+                script.src = `https://api.forismatic.com/api/1.0/?method=getQuote&lang=en&format=jsonp&jsonp=${callbackName}`;
+
+                window[callbackName] = function (data) {
+                    const quoteText = data.quoteText || "No quote available.";
+                    const quoteAuthor = data.quoteAuthor ? `— ${data.quoteAuthor}` : "";
+                    document.getElementById('random-thought').innerHTML = `<em>"${quoteText}"</em> <br> ${quoteAuthor}`;
+                    delete window[callbackName];
+                    document.body.removeChild(script);
+                };
+
+                script.onerror = function () {
+                    document.getElementById('random-thought').innerHTML = `<em>Failed to load a random thought. Try again later.</em>`;
+                    delete window[callbackName];
+                    document.body.removeChild(script);
+                };
+
+                document.body.appendChild(script);
+            }
+
+            fetchRandomQuote();
+        </script>
     </div>
-    <div class="divider"></div>
+
     <footer>
         <p>© 2024 Andrea's Dev Space | <span class="emoji">💻</span></p>
     </footer>
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <script>
-        async function loadPosts() {
-            const response = await fetch('posts/index.json');
-            const posts = await response.json();
-            const postsList = document.getElementById('posts-list');
-
-            postsList.innerHTML = posts.map(post => `
-                <li>
-                    <a href="#" data-file="${post.file}" onclick="loadPost(event, '${post.file}')">${post.title}</a>
-                </li>
-            `).join('');
-        }
-
-        async function loadPost(event, file) {
-            event.preventDefault();
-            const response = await fetch(`posts/${file}`);
-            const content = await response.text();
-            document.getElementById('post-content').innerHTML = marked.parse(content);
-
-            document.getElementById('blog-list').style.display = 'none';
-            document.getElementById('blog-content').style.display = 'block';
-        }
-
-        document.getElementById('back-button').addEventListener('click', () => {
-            document.getElementById('blog-list').style.display = 'block';
-            document.getElementById('blog-content').style.display = 'none';
-        });
-
-        loadPosts();
-    </script>
 </body>
 </html>
